@@ -1,29 +1,45 @@
+: "init" && {
+  if [[ -z "$TMUX" ]]
+  then
+    tmux new-session;
+    exit;
+  fi
+}
+
 : "zgen" && {
   source "${HOME}/.zgen/zgen.zsh"
   if ! zgen saved; then
     echo "Creating a zgen save..."
-    zgen oh-my-zsh
-    zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/sudo
-    zgen oh-my-zsh plugins/aws
-    zgen oh-my-zsh plugins/command-not-found
-    # zgen oh-my-zsh plugins/minikube # WAITING FOR RELEASE...
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zsh-users/zsh-history-substring-search
-    zgen load zsh-users/zsh-completions src
+    zgen prezto
+    zgen prezto git
+    zgen prezto command-not-found
+    zgen prezto completion
+    zgen prezto directory
+    zgen prezto syntax-highlighting
+
+
+    # zgen oh-my-zsh
+    # zgen oh-my-zsh plugins/git
+    # zgen oh-my-zsh plugins/sudo
+    # zgen oh-my-zsh plugins/aws
+    # zgen oh-my-zsh plugins/command-not-found
+    # # zgen oh-my-zsh plugins/minikube # WAITING FOR RELEASE...
+    # zgen load zsh-users/zsh-syntax-highlighting
+    # zgen load zsh-users/zsh-history-substring-search
+    # zgen load zsh-users/zsh-completions src
     zgen load Tarrasch/zsh-autoenv
-    # zgen load zchee/go-zsh-completions
-    # zgen load wbinglee/zsh-wakatime
-    zgen load lukechilds/zsh-better-npm-completion
-    zgen load docker/cli contrib/completion/zsh/_docker
-    zgen load docker/compose contrib/completion/zsh/_docker-compose
+    # # zgen load zchee/go-zsh-completions
+    # # zgen load wbinglee/zsh-wakatime
+#    zgen load lukechilds/zsh-better-npm-completion
+#    zgen load docker/cli contrib/completion/zsh/_docker
+#    zgen load docker/compose contrib/completion/zsh/_docker-compose
     zgen save
   fi
 }
 
 : "set env" && {
   # general
-  export PROMPT='[%*]%{$fg_bold[green]%} %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}%(?.%{$fg[green]%}.%{$fg[red]%})%B%(!.#.$)%b '
+  # export PROMPT='[%*]%{$fg_bold[green]%} %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}%(?.%{$fg[green]%}.%{$fg[red]%})%B%(!.#.$)%b '
   export HIST_STAMPS="yyyy/mm/dd"
   export EDITOR='vim'
   # go
@@ -52,17 +68,22 @@
   export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 }
 
-: "set direnv" && {
-  _direnv_hook() {
-    eval "$(direnv export zsh)";
-  }
-  typeset -ag precmd_functions;
-  if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]; then
-    precmd_functions+=_direnv_hook;
-  fi
-}
+#: "set direnv" && {
+#  _direnv_hook() {
+#    eval "$(direnv export zsh)";
+#  }
+#  typeset -ag precmd_functions;
+#  if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]; then
+#    precmd_functions+=_direnv_hook;
+#  fi
+#}
 
 : "alias" && {
+  alias ga="git add"
+  alias ggpull="git pull"
+  alias ggpush="git push"
+  alias gss="git status -s"
+  alias gd="git diff"
   alias gdw="git diff --color-words"
   alias gh='cd $(ghq list -p | peco)'
   alias glogg='git log --graph --name-status --pretty=format:"%C(red)%h %C(green)%an %Creset%s %C(yellow)%d%Creset"'
@@ -78,9 +99,11 @@
   PERIOD=5
   if [ `who am i | awk '{print $1}'` != "vagrant" ];then \
     show-current-dir-as-window-name() {
-      local PROMPT=$($HOME/dotfiles/bin/git-echo-prompt-is-clean)
-      tmux set-window-option window-status-format " #I:${PWD:t}$PROMPT " > /dev/null
-      tmux set-window-option window-status-current-format " #I:${PWD:t}$PROMPT " > /dev/null
+      # local PROMPT=$($HOME/dotfiles/bin/git-echo-prompt-is-clean)
+      # tmux set-window-option window-status-format " #I:${PWD:t}$PROMPT " > /dev/null
+      tmux set-window-option window-status-format " #I:${PWD:t} " > /dev/null
+      # tmux set-window-option window-status-current-format " #I:${PWD:t}$PROMPT " > /dev/null
+      tmux set-window-option window-status-current-format " #I:${PWD:t} " > /dev/null
     }
     show-current-dir-as-window-name
     add-zsh-hook precmd show-current-dir-as-window-name
