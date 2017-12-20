@@ -1,12 +1,11 @@
 : "init" && {
-  if [[ -z "$TMUX" ]]
-  then
-    tmux new-session;
-    exit;
-  fi
-
   autoload -Uz compinit
   compinit -C
+
+  setopt inc_append_history
+  setopt share_history
+
+  bindkey -e
 }
 
 
@@ -23,8 +22,6 @@
 #    zgen oh-my-zsh plugins/command-not-found
 #
      zgen load robbyrussell/oh-my-zsh plugins/git
-     zgen load robbyrussell/oh-my-zsh plugins/sudo              
-     zgen load robbyrussell/oh-my-zsh plugins/command-not-found 
 
      zgen load aws/aws-cli bin/aws_zsh_completer.sh
      zgen load zsh-users/zsh-syntax-highlighting
@@ -53,7 +50,7 @@
 : "set env" && {
   # general
   export MNML_RPROMPT=();
-  export MNML_PROMPT=(mnml_time 'mnml_cwd 0 10' mnml_git mnml_status mnml_keymap);
+  export MNML_PROMPT=(mnml_time 'mnml_cwd 2 14' mnml_git mnml_status mnml_keymap);
   export MNML_MAGICENTER=()
   export MNML_USER_CHAR='$'
   export MNML_INFOLN=()
