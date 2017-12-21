@@ -2,6 +2,8 @@
   autoload -Uz compinit
   compinit -C
 
+  zstyle ':completion:*' list-colors ''
+  zstyle ':completion:*:default' menu select=2
   setopt inc_append_history
   setopt share_history
 
@@ -21,13 +23,12 @@
 #    zgen oh-my-zsh plugins/sudo
 #    zgen oh-my-zsh plugins/command-not-found
 #
-     zgen load robbyrussell/oh-my-zsh plugins/git
-
-     zgen load aws/aws-cli bin/aws_zsh_completer.sh
-     zgen load zsh-users/zsh-syntax-highlighting
-     zgen load zsh-users/zsh-history-substring-search
-     zgen load zsh-users/zsh-completions
-     zgen load Tarrasch/zsh-autoenv
+    zgen load robbyrussell/oh-my-zsh plugins/git
+    zgen load aws/aws-cli bin/aws_zsh_completer.sh
+    zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-history-substring-search
+    zgen load zsh-users/zsh-completions
+    zgen load Tarrasch/zsh-autoenv
 #    zgen load zchee/go-zsh-completions
 #    zgen load lukechilds/zsh-better-npm-completion
 #    zgen load docker/cli contrib/completion/zsh/_docker
