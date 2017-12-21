@@ -1,44 +1,19 @@
 : "init" && {
+  if [[ -z "$TMUX" ]]
+  then
+    tmux new-session;
+    exit;
+  fi
+}
+
+: "setting for mnml" && {
   autoload -Uz compinit
   compinit -C
-
   zstyle ':completion:*' list-colors ''
   zstyle ':completion:*:default' menu select=2
   setopt inc_append_history
   setopt share_history
-
   bindkey -e
-}
-
-
-: "zgen" && {
-  source "${HOME}/.zgen/zgen.zsh"
-  if ! zgen saved; then
-    echo "Creating a zgen save..."
-
-    zgen load subnixr/minimal
-#
-#    zgen oh-my-zsh
-#    zgen oh-my-zsh plugins/git
-#    zgen oh-my-zsh plugins/sudo
-#    zgen oh-my-zsh plugins/command-not-found
-#
-    zgen load robbyrussell/oh-my-zsh plugins/git
-    zgen load aws/aws-cli bin/aws_zsh_completer.sh
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zsh-users/zsh-history-substring-search
-    zgen load zsh-users/zsh-completions
-    zgen load Tarrasch/zsh-autoenv
-#    zgen load zchee/go-zsh-completions
-#    zgen load lukechilds/zsh-better-npm-completion
-#    zgen load docker/cli contrib/completion/zsh/_docker
-#    zgen load docker/compose contrib/completion/zsh/_docker-compose
-#
-   zgen save
-  fi
-}
-
-: "mnml user func" && {
   function mnml_buffer_empty {
     zle redisplay
     zle accept-line
@@ -46,15 +21,40 @@
   function mnml_time {
     echo -n "[%*]"
   }
-}
-
-: "set env" && {
-  # general
   export MNML_RPROMPT=();
   export MNML_PROMPT=(mnml_time 'mnml_cwd 2 14' mnml_git mnml_status mnml_keymap);
   export MNML_MAGICENTER=()
   export MNML_USER_CHAR='$'
   export MNML_INFOLN=()
+}
+
+: "zgen" && {
+  source "${HOME}/.zgen/zgen.zsh"
+  if ! zgen saved; then
+    echo "Creating a zgen save..."
+
+    zgen load subnixr/minimal
+
+#    zgen oh-my-zsh
+#    zgen oh-my-zsh plugins/git
+
+    zgen load robbyrussell/oh-my-zsh plugins/git
+    zgen load aws/aws-cli bin/aws_zsh_completer.sh
+    zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-history-substring-search
+    zgen load zsh-users/zsh-completions
+    zgen load Tarrasch/zsh-autoenv
+#    zgen load zchee/go-zsh-completions
+    zgen load lukechilds/zsh-better-npm-completion
+    zgen load docker/cli contrib/completion/zsh/_docker
+    zgen load docker/compose contrib/completion/zsh/_docker-compose
+
+    zgen save
+  fi
+}
+
+: "set env" && {
+  # general
   # export PROMPT='[%*]%{$fg_bold[green]%} %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}%{$reset_color%}%(?.%{$fg[green]%}.%{$fg[red]%})%B%(!.#.$)%b '
   export HIST_STAMPS="yyyy/mm/dd"
   export EDITOR='vim'
